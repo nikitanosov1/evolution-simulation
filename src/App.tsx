@@ -1,12 +1,20 @@
 import { ThemeProvider } from "@emotion/react";
 import {
   Button,
+  Checkbox,
+  FormControlLabel,
   InputAdornment,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
-import { useEffect, useState, useCallback, useMemo } from "react";
+import {
+  useEffect,
+  useState,
+  useCallback,
+  useMemo,
+  SyntheticEvent,
+} from "react";
 import {
   CartesianGrid,
   Legend,
@@ -60,6 +68,8 @@ function App() {
     }
     return total;
   }, [data, numberOfPopulations]);
+  const [isActiveModification, setIsActiveModification] = useState(false);
+  const [probabilityOfEscape, setProbabilityOfEscape] = useState(50);
   const [start, setStart] = useState(false);
 
   useEffect(() => {
@@ -114,6 +124,20 @@ function App() {
     []
   );
 
+  const handleIsActiveSimulationChange = useCallback(
+    (event: SyntheticEvent<Element, Event>, checked: boolean) => {
+      setIsActiveModification(checked);
+    },
+    []
+  );
+
+  const handleProbabilityOfEscapeChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setProbabilityOfEscape(+event.target.value);
+    },
+    []
+  );
+
   const getDaysText = (days: number) => {
     if (days === 1) {
       return "день";
@@ -151,7 +175,14 @@ function App() {
             const growth = populations[i].growth;
             let dN = N * growth;
             for (let j = 0; j < numberOfPopulations; ++j) {
-              dN += coeffs[i][j] * N * lastPoint[j];
+              // Модификация
+              if (isActiveModification && coeffs[i][j] < 0) {
+                const isSuccessEscape =
+                  Math.random() < probabilityOfEscape / 100;
+                dN += isSuccessEscape ? 0 : coeffs[i][j] * N * lastPoint[j];
+              } else {
+                dN += coeffs[i][j] * N * lastPoint[j];
+              }
             }
             newPoint[i] = N + dN;
           }
@@ -228,6 +259,29 @@ function App() {
               value={simulationStep}
               onChange={handleSimulationStepChange}
             />
+            <FormControlLabel
+              control={<Checkbox checked={isActiveModification} />}
+              onChange={handleIsActiveSimulationChange}
+              label="Использовать модификацию"
+            />
+
+            {isActiveModification && (
+              <TextField
+                label="Вероятность побега"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <Typography>%</Typography>
+                    </InputAdornment>
+                  ),
+                }}
+                id="probabilityOfEscape"
+                type="number"
+                value={probabilityOfEscape}
+                onChange={handleProbabilityOfEscapeChange}
+              />
+            )}
+
             <Button onClick={handleClick} variant="contained" color="primary">
               {start ? "Остановить" : "Начать"}
             </Button>
