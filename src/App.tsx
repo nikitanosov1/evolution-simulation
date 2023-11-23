@@ -9,6 +9,7 @@ import {
 import { useEffect, useState, useCallback, useMemo } from "react";
 import {
   CartesianGrid,
+  Legend,
   Line,
   LineChart,
   ResponsiveContainer,
@@ -128,14 +129,14 @@ function App() {
   }, []);
 
   useEffect(() => {
-    let requestId: number;
+    let request: number;
     let day = 0;
     const startSimulation = () => {
       if (!start) {
         return;
       }
       if (day > simulationDuration) {
-        cancelAnimationFrame(requestId);
+        cancelAnimationFrame(request);
         return;
       }
       setData((p) => {
@@ -158,12 +159,12 @@ function App() {
         return [...p, newData];
       });
       day += simulationStep;
-      requestId = requestAnimationFrame(startSimulation);
+      request = requestAnimationFrame(startSimulation);
     };
     start && startSimulation();
 
     return () => {
-      requestId && cancelAnimationFrame(requestId);
+      request && cancelAnimationFrame(request);
     };
   }, [
     simulationDuration,
@@ -196,7 +197,6 @@ function App() {
               id="numberOfPopulations"
               value={numberOfPopulations}
               onChange={handleNumberOfPopulationsChange}
-              placeholder="number of populations"
             />
 
             <TextField
@@ -210,7 +210,6 @@ function App() {
               }}
               id="sumulationDuration"
               type="number"
-              placeholder="days"
               value={simulationDuration}
               onChange={handleSimulationDurationChange}
             />
@@ -226,7 +225,6 @@ function App() {
               }}
               id="sumulationStep"
               type="number"
-              placeholder="step"
               value={simulationStep}
               onChange={handleSimulationStepChange}
             />
@@ -272,7 +270,6 @@ function App() {
                         )
                       )
                     }
-                    placeholder="number of populations"
                   />
                   <TextField
                     label="Коэффициент рождаемости"
@@ -290,7 +287,6 @@ function App() {
                         )
                       )
                     }
-                    placeholder="number of populations"
                   />
                 </Stack>
               ))}
@@ -308,7 +304,7 @@ function App() {
                           p.map((row, rowIndex) =>
                             row.map((num, colIndex) =>
                               rowIdx === rowIndex && colIdx === colIndex
-                                ? +e.target.value
+                                ? Number(e.target.value)
                                 : num
                             )
                           )
@@ -335,7 +331,7 @@ function App() {
               height={300}
               data={data}
               margin={{
-                top: 50,
+                top: 30,
                 right: 30,
                 left: 20,
                 bottom: 5,
@@ -345,13 +341,20 @@ function App() {
               <XAxis dataKey="day" />
               <YAxis />
               <Tooltip />
+              <Legend
+                wrapperStyle={{
+                  fontSize: 20,
+                  paddingTop: "40px",
+                }}
+              ></Legend>
               {populations.map((_, index) => (
                 <Line
+                  name={`Популяция #${index + 1}`}
                   key={index}
                   type="monotone"
                   dataKey={index}
-                  stroke={colors[index % colors.length]}
                   dot={false}
+                  stroke={colors[index % colors.length]}
                 />
               ))}
             </LineChart>
