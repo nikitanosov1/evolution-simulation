@@ -140,23 +140,23 @@ function App() {
         return;
       }
       setData((p) => {
-        const currentData = p[p.length - 1];
-        const newData = {
-          ...currentData,
-          day: currentData.day + simulationStep,
+        const lastPoint = p[p.length - 1];
+        const newPoint = {
+          ...lastPoint,
+          day: lastPoint.day + simulationStep,
         } as Record<string, number>;
         for (let k = 0; k < simulationStep; ++k) {
           for (let i = 0; i < numberOfPopulations; ++i) {
-            const N = newData[i];
+            const N = lastPoint[i];
             const growth = populations[i].growth;
             let dN = N * growth;
             for (let j = 0; j < numberOfPopulations; ++j) {
-              dN += coeffs[i][j] * N * newData[j];
+              dN += coeffs[i][j] * N * lastPoint[j];
             }
-            newData[i] = N + dN;
+            newPoint[i] = N + dN;
           }
         }
-        return [...p, newData];
+        return [...p, newPoint];
       });
       day += simulationStep;
       request = requestAnimationFrame(startSimulation);
