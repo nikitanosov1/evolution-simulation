@@ -125,7 +125,7 @@ function App() {
   );
 
   const handleIsActiveSimulationChange = useCallback(
-    (event: SyntheticEvent<Element, Event>, checked: boolean) => {
+    (_event: SyntheticEvent<Element, Event>, checked: boolean) => {
       setIsActiveModification(checked);
     },
     []
@@ -204,6 +204,8 @@ function App() {
     coeffs,
     start,
     simulationStep,
+    isActiveModification,
+    probabilityOfEscape,
   ]);
 
   return (
