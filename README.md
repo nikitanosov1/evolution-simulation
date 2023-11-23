@@ -1,30 +1,29 @@
-# React + TypeScript + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+# Математическое моделирование модели "Хищник-Охотник"
+Проект доступен по [ссылке](https://nikitanosov1.github.io/evolution-simulation/)
+## Локальный запуск
 ```
+npm i
+npm run dev
+```
+## Базовая математическая модель 
+![image](https://github.com/nikitanosov1/evolution-simulation/assets/71886485/74ff07eb-2a5f-4e79-9523-0d7ca9b6b89d)
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## Улучшение математической модели
+
+В качестве улучшения добавлен коэффициент, отвечающий за вероятность побега Хищника от Охотника. То есть если B<sub>ij</sub> < 0, то с какой-то заданной вероятностью слагаемое B<sub>ij</sub>N<sub>i</sub>N<sub>j</sub> не будет учитываться при расчете.
+
+## Скриншоты работы
+
+Без модификации
+![image](https://github.com/nikitanosov1/evolution-simulation/assets/71886485/95f80636-359c-41eb-b3da-a1ea6ba9e498)
+
+С модификацией
+![image](https://github.com/nikitanosov1/evolution-simulation/assets/71886485/2eec2c09-3245-415e-89c3-948a63c4c4db)
+
+Три популяции
+![image](https://github.com/nikitanosov1/evolution-simulation/assets/71886485/af1863ea-4721-4efd-b907-7c5b3d1c9125)
+
+
+
+
+
